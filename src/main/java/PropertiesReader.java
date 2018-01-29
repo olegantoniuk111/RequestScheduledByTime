@@ -8,7 +8,7 @@ public class PropertiesReader {
     private static InputStream in;
     private static Properties properties = new Properties();
 
-    public static int getRequestsAmount (){
+    public static int getRequestsQuantity (){
         return Integer.valueOf(getPropertiesByKey("requestQuantity"));
     }
 

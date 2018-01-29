@@ -26,7 +26,7 @@ public class Task implements Runnable {
 
     private void sendRequest() {
         try {
-            System.out.println("task "+ number +" started at " + getTime());
+            System.out.println("request "+ number +" send at " + getTime());
             response = client.execute(httpGet, httpClientContext);
 
         } catch (IOException e) {
