@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskExecutor {
 
-    private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
+    private ScheduledExecutorService scheduledExecutorService ;
     public static HttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
     private CloseableHttpClient client = HttpClients
             .custom().setConnectionManager(TaskExecutor.manager).build();
@@ -18,6 +18,7 @@ public class TaskExecutor {
 
 
     public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds){
+        scheduledExecutorService =scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
         tasks = Task.createRequestTasks(client,taskQuantity );
         int time = 0;
         for(Task task : tasks){
