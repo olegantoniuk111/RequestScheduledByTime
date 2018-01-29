@@ -1,9 +1,12 @@
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class Task implements Runnable {
     private HttpGet httpGet;
@@ -42,5 +45,15 @@ public class Task implements Runnable {
 
     private LocalTime getTime(){
         return LocalTime.now();
+    }
+
+    public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quatity){
+        Collection<Task> tasks = new LinkedList<Task>();
+        for(int i=0; i < quatity; i++){
+            HttpGet get = new HttpGet(PropertiesReader.getHostName());
+            tasks.add(new Task(get,client, i));
+        }
+        return tasks;
+
     }
 }
