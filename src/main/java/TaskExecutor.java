@@ -18,7 +18,7 @@ public class TaskExecutor {
 
 
     public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds){
-        scheduledExecutorService =scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
+        scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
         tasks = Task.createRequestTasks(client,taskQuantity );
         int time = 0;
         for(Task task : tasks){
