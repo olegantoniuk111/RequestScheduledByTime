@@ -8,7 +8,7 @@ public class Main {
 
     private static int calculateIntervalinmilliseconds (){
         return PropertiesReader.getTimeForExecution()*1000
-                /PropertiesReader.getRequestsAmount(); // calculate interval in milliseconds for execution Task
+                /PropertiesReader.getRequestsAmount(); // calculate interval in milliseconds between  Tasks
     }
 
 }

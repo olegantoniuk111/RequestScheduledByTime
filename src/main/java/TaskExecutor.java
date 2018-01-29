@@ -17,11 +17,12 @@ public class TaskExecutor {
 
 
     public void executeTasks(int tasksAmount, int intervalBetweenTasksInMilliseconds){
+        manager.setDefaultMaxPerRoute(5);
         Collection<Task> tasks = createTasks(tasksAmount);
         int time = 0;
         for(Task task : tasks){
             scheduledExecutorService.schedule(task,time, TimeUnit.MILLISECONDS);
-            time+=intervalBetweenTasksInMilliseconds;
+            time += intervalBetweenTasksInMilliseconds;
         }
         scheduledExecutorService.shutdown();
         manager.shutdown();
@@ -32,9 +33,8 @@ public class TaskExecutor {
         Collection<Task> tasks = new LinkedList<Task>();
         for(int i=0; i<tasksAmount; i++){
             HttpGet get = new HttpGet(PropertiesReader.getHostName());
-            tasks.add(new Task(get,client));
+            tasks.add(new Task(get,client, i));
         }
-        System.out.println("Task's created");
         return tasks;
 
     }
