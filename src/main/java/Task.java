@@ -2,6 +2,7 @@
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -35,11 +36,10 @@ public class Task implements Runnable {
         } catch (IOException e) {
             System.out.println("exeption occur during request execution");
         }finally {
-            try {
-                response.close();
-            } catch (IOException e) {
-                System.out.println("exeption occur during releasing response resources");
-            }
+            HttpClientUtils.closeQuietly(response);
+            System.out.println("response "+ number +" closed " + getTime());
+
+
         }
     }
 

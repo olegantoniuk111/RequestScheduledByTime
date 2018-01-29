@@ -1,4 +1,5 @@
 
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -27,6 +28,7 @@ public class TaskExecutor {
         }
         scheduledExecutorService.shutdown();
         manager.shutdown();
+        HttpClientUtils.closeQuietly(client);
     }
 
 
