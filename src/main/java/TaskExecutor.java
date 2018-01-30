@@ -4,8 +4,6 @@ import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-
-import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -13,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskExecutor {
 
-    private ScheduledExecutorService scheduledExecutorService ;
+    private ScheduledThreadPoolExecutor scheduledExecutorService ;
     public static HttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
     private CloseableHttpClient client = HttpClients
             .custom().setConnectionManager(TaskExecutor.manager).build();
@@ -28,12 +26,10 @@ public class TaskExecutor {
             scheduledExecutorService.schedule(task,time, TimeUnit.MILLISECONDS);
             time += intervalBetweenTasksInMilliseconds;
         }
-            scheduledExecutorService.shutdown();
-
-
+        shutDownExecutor(scheduledExecutorService);
     }
 
-    private void shutDownexecutor(ScheduledExecutorService scheduledExecutorService) {
+    private void shutDownExecutor(ScheduledThreadPoolExecutor scheduledExecutorService) {
         scheduledExecutorService.shutdown();
         try {
             boolean tasksDone = false;
@@ -46,11 +42,11 @@ public class TaskExecutor {
             manager.shutdown();
             HttpClientUtils.closeQuietly(client);
         }finally {
+
             manager.shutdown();
             HttpClientUtils.closeQuietly(client);
         }
     }
-
 
 }
 
