@@ -25,10 +25,10 @@ public class TaskExecutor {
             scheduledExecutorService.schedule(task,time, TimeUnit.MILLISECONDS);
             time += intervalBetweenTasksInMilliseconds;
         }
-        shutDownExecutor(scheduledExecutorService);
+        stopTasksExecution(scheduledExecutorService);
     }
 
-    private void shutDownExecutor(ScheduledThreadPoolExecutor scheduledExecutorService) {
+    private void stopTasksExecution(ScheduledThreadPoolExecutor scheduledExecutorService) {
         scheduledExecutorService.shutdown();
         try {
             boolean tasksDone = false;
@@ -41,7 +41,6 @@ public class TaskExecutor {
             manager.shutdown();
             HttpClientUtils.closeQuietly(client);
         }finally {
-
             manager.shutdown();
             HttpClientUtils.closeQuietly(client);
         }
