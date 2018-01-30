@@ -29,14 +29,23 @@ public class Task implements Runnable {
 
     private void sendRequest() {
         try {
-            System.out.println("request "+ number +" send at " + getTime());
+            logRequest(number);
             response = client.execute(httpGet, httpClientContext);
+            //logResponse(response, number);
         } catch (Exception e) {
           e.printStackTrace();
             System.out.println("exeption occur during request execution");
         }finally {
             HttpClientUtils.closeQuietly(response);
         }
+    }
+
+    private void logRequest(int requestNumber){
+        System.out.println("request "+ requestNumber +" send at " + getTime());
+    }
+
+    private void logResponse(CloseableHttpResponse response, int responseNumber){
+        System.out.println("response "+ number + " back at"+ getTime() + "with status code" + response.getStatusLine().getStatusCode() );
     }
 
     private LocalTime getTime(){

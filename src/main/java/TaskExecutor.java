@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class TaskExecutor {
 
     private ScheduledThreadPoolExecutor scheduledExecutorService ;
-    private   HttpClientConnectionManager manager;
+    private HttpClientConnectionManager manager;
     private CloseableHttpClient client;
 
 
