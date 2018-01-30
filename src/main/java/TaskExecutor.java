@@ -4,6 +4,8 @@ import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -15,23 +17,41 @@ public class TaskExecutor {
     public static HttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
     private CloseableHttpClient client = HttpClients
             .custom().setConnectionManager(TaskExecutor.manager).build();
-    Collection<Task> tasks;
 
 
-    public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds){
+
+    public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds)  {
         scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
-        tasks = Task.createRequestTasks(client,taskQuantity );
+        Collection <Task> tasks = Task.createRequestTasks(client, taskQuantity);
         int time = 0;
         for(Task task : tasks){
             scheduledExecutorService.schedule(task,time, TimeUnit.MILLISECONDS);
             time += intervalBetweenTasksInMilliseconds;
         }
+            scheduledExecutorService.shutdown();
+
+
+    }
+
+    private void shutDownexecutor(ScheduledExecutorService scheduledExecutorService) {
         scheduledExecutorService.shutdown();
-        manager.shutdown();
-        HttpClientUtils.closeQuietly(client);
+        try {
+            boolean tasksDone = false;
+            do{
+                tasksDone = scheduledExecutorService.awaitTermination(1, TimeUnit.MILLISECONDS);
+            }while (!tasksDone);
+        }catch (InterruptedException e){
+            System.out.println("Tasks execution was interrupted");
+            scheduledExecutorService.shutdownNow();
+            manager.shutdown();
+            HttpClientUtils.closeQuietly(client);
+        }finally {
+            manager.shutdown();
+            HttpClientUtils.closeQuietly(client);
+        }
     }
 
 
-    }
+}
 
 

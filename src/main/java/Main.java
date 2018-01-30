@@ -7,7 +7,9 @@ public class Main {
         int interval = calculateIntervalinmilliseconds();
 
         TaskExecutor executor = new TaskExecutor();
-        executor.executeTasks(taskQuantity, interval);
+
+            executor.executeTasks(taskQuantity, interval);
+
 
 
     }

@@ -4,7 +4,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
-import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -32,14 +31,11 @@ public class Task implements Runnable {
         try {
             System.out.println("request "+ number +" send at " + getTime());
             response = client.execute(httpGet, httpClientContext);
-
-        } catch (IOException e) {
+        } catch (Exception e) {
+          e.printStackTrace();
             System.out.println("exeption occur during request execution");
         }finally {
             HttpClientUtils.closeQuietly(response);
-            System.out.println("response "+ number +" closed " + getTime());
-
-
         }
     }
 
