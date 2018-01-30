@@ -11,11 +11,15 @@ import java.util.concurrent.TimeUnit;
 public class TaskExecutor {
 
     private ScheduledThreadPoolExecutor scheduledExecutorService ;
-    public static HttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
-    private CloseableHttpClient client = HttpClients
-            .custom().setConnectionManager(TaskExecutor.manager).build();
+    private   HttpClientConnectionManager manager;
+    private CloseableHttpClient client;
 
 
+    public TaskExecutor() {
+        manager = new PoolingHttpClientConnectionManager();
+        client = HttpClients
+                .custom().setConnectionManager(manager).build();
+    }
 
     public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds)  {
         scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
