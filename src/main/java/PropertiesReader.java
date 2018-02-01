@@ -2,17 +2,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.Properties;
 
 public class PropertiesReader {
     private static InputStream in;
     private static Properties properties = new Properties();
 
+
     public static int getRequestsQuantity (){
         return Integer.valueOf(getPropertiesByKey("requestQuantity"));
     }
 
-    public static int getTimeForExecution(){
+    public static Duration calculateDuration (){
+        Duration duration = Duration.ofSeconds(getTimeForExecution());
+        return duration.dividedBy(getRequestsQuantity());
+    }
+
+    private static int getTimeForExecution(){
         return Integer.valueOf(getPropertiesByKey("timeForExecution"));
     }
     public static String getHostName(){

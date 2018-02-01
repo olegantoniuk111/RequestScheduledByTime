@@ -28,9 +28,9 @@ public class Task implements Runnable {
 
     private void sendRequest() {
         try {
-            logRequest(number);
+            logRequest();
             response = client.execute(httpGet, httpClientContext);
-            //logResponse(response, number);
+            //logResponse();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("exeption occur during request execution");
@@ -39,11 +39,11 @@ public class Task implements Runnable {
         }
     }
 
-    private void logRequest(int requestNumber){
-        System.out.println("request "+ requestNumber +" send at " + getTime());
+    private void logRequest(){
+        System.out.println("request "+ number +" send at " + LocalTime.now().toString());
     }
 
-    private void logResponse(CloseableHttpResponse response, int responseNumber){
+    private void logResponse(){
         System.out.println("response "+ number + " back at"+ getTime() + "with status code" + response.getStatusLine().getStatusCode() );
     }
 
@@ -52,7 +52,7 @@ public class Task implements Runnable {
     }
 
     public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quatity){
-        Collection<Task> tasks = new LinkedList<Task>();
+        Collection<Task> tasks = new LinkedList <Task>();
         for(int i=0; i < quatity; i++){
             HttpGet get = new HttpGet(PropertiesReader.getHostName());
             tasks.add(new Task(get,client, i));
