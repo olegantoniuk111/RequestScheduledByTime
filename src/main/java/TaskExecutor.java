@@ -17,15 +17,19 @@ public class TaskExecutor {
     private Duration duration;
 
 
-    public TaskExecutor(int taskQuantity, Duration duration) {
+    public TaskExecutor(int taskQuantity, int timeForExecution) {
         this.taskQuantity = taskQuantity;
-        this.duration = duration;
+        this.duration = calculateDuration(taskQuantity, timeForExecution);
         manager = new PoolingHttpClientConnectionManager();
         client = HttpClients
                 .custom().setConnectionManager(manager).build();
         scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
 
     }
+    private  Duration calculateDuration (int requestsQuantity, int timeForExecution){
+        return Duration.ofSeconds(timeForExecution).dividedBy(requestsQuantity);
+    }
+
 
     public void executeTasks( )  {
         Collection <Task> tasks = Task.createRequestTasks(client, taskQuantity);

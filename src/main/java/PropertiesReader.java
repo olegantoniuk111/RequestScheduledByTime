@@ -14,11 +14,9 @@ public class PropertiesReader {
         return Integer.valueOf(getPropertiesByKey("requestQuantity"));
     }
 
-    public static Duration calculateDuration (){
-        return Duration.ofSeconds(getTimeForExecution()).dividedBy(getRequestsQuantity());
-    }
 
-    private static int getTimeForExecution(){
+
+    public static int getTimeForExecution(){
         return Integer.valueOf(getPropertiesByKey("timeForExecution"));
     }
     public static String getHostName(){

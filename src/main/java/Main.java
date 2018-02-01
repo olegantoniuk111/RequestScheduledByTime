@@ -1,12 +1,12 @@
-import java.time.Duration;
+
 
 public class Main {
 
     public static void main(String[] args) {
         int taskQuantity = PropertiesReader.getRequestsQuantity();
-        Duration duration = PropertiesReader.calculateDuration();
+        int timeForExecution = PropertiesReader.getTimeForExecution();
 
-        TaskExecutor executor = new TaskExecutor(taskQuantity, duration);
+        TaskExecutor executor = new TaskExecutor(taskQuantity, timeForExecution);
         executor.executeTasks();
 
 
