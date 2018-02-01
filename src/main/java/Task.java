@@ -1,4 +1,3 @@
-
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -33,7 +32,7 @@ public class Task implements Runnable {
             response = client.execute(httpGet, httpClientContext);
             //logResponse(response, number);
         } catch (Exception e) {
-          e.printStackTrace();
+            e.printStackTrace();
             System.out.println("exeption occur during request execution");
         }finally {
             HttpClientUtils.closeQuietly(response);

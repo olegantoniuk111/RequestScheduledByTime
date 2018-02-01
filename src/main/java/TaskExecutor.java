@@ -15,19 +15,20 @@ public class TaskExecutor {
     private CloseableHttpClient client;
 
 
-    public TaskExecutor() {
+    public TaskExecutor(int taskQuantity) {
         manager = new PoolingHttpClientConnectionManager();
+
         client = HttpClients
                 .custom().setConnectionManager(manager).build();
+        scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
     }
 
-    public void executeTasks(int taskQuantity, int intervalBetweenTasksInMilliseconds)  {
-        scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
+    public void executeTasks(int taskQuantity, long interval)  {
         Collection <Task> tasks = Task.createRequestTasks(client, taskQuantity);
-        int time = 0;
+        long time = 0;
         for(Task task : tasks){
-            scheduledExecutorService.schedule(task,time, TimeUnit.MILLISECONDS);
-            time += intervalBetweenTasksInMilliseconds;
+            scheduledExecutorService.schedule(task, time, TimeUnit.NANOSECONDS);
+            time += interval;
         }
         stopTasksExecution(scheduledExecutorService);
     }
@@ -37,19 +38,18 @@ public class TaskExecutor {
         try {
             boolean tasksDone = false;
             do{
-                tasksDone = scheduledExecutorService.awaitTermination(1, TimeUnit.MILLISECONDS);
+                tasksDone = scheduledExecutorService.awaitTermination(1, TimeUnit.NANOSECONDS);
             }while (!tasksDone);
         }catch (InterruptedException e){
             System.out.println("Tasks execution was interrupted");
             scheduledExecutorService.shutdownNow();
-            manager.shutdown();
             HttpClientUtils.closeQuietly(client);
+            manager.shutdown();
         }finally {
-            manager.shutdown();
             HttpClientUtils.closeQuietly(client);
+            manager.shutdown();
+            scheduledExecutorService.shutdownNow();
         }
     }
 
 }
-
-

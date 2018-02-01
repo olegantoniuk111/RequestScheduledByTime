@@ -1,18 +1,18 @@
-
+import java.time.Duration;
 
 public class Main {
 
     public static void main(String[] args) {
         int taskQuantity = PropertiesReader.getRequestsQuantity();
-        int interval = calculateIntervalinmilliseconds();
-
-        TaskExecutor executor = new TaskExecutor();
+        long interval = calculateInterval();
+        System.out.println(interval);
+        TaskExecutor executor = new TaskExecutor(taskQuantity);
         executor.executeTasks(taskQuantity, interval);
     }
 
-    private static int calculateIntervalinmilliseconds (){
-        return PropertiesReader.getTimeForExecution()*1000
-                /PropertiesReader.getRequestsQuantity(); // calculate interval in milliseconds between  Tasks
+    private static long calculateInterval (){
+        Duration duration = Duration.ofSeconds(PropertiesReader.getTimeForExecution());
+        return duration.dividedBy(PropertiesReader.getRequestsQuantity()).toNanos();
     }
 
 }
