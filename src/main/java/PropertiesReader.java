@@ -15,8 +15,7 @@ public class PropertiesReader {
     }
 
     public static Duration calculateDuration (){
-        Duration duration = Duration.ofSeconds(getTimeForExecution());
-        return duration.dividedBy(getRequestsQuantity());
+        return Duration.ofSeconds(getTimeForExecution()).dividedBy(getRequestsQuantity());
     }
 
     private static int getTimeForExecution(){
