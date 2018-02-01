@@ -5,7 +5,8 @@ import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class Task implements Runnable {
     private HttpGet httpGet;
@@ -20,17 +21,34 @@ public class Task implements Runnable {
         this.client = client;
         this.number = number;
         this.httpClientContext = HttpClientContext.create();
+
     }
 
     public void run() {
         sendRequest();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return number == task.number &&
+                Objects.equals(httpGet, task.httpGet) &&
+                Objects.equals(client, task.client) &&
+                Objects.equals(httpClientContext, task.httpClientContext) &&
+                Objects.equals(response, task.response);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(httpGet, client, httpClientContext, response, number);
+    }
+
     private void sendRequest() {
         try {
             logRequest();
             response = client.execute(httpGet, httpClientContext);
-            //logResponse();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("exeption occur during request execution");
@@ -51,11 +69,11 @@ public class Task implements Runnable {
         return LocalTime.now();
     }
 
-    public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quatity){
-        Collection<Task> tasks = new LinkedList <Task>();
-        for(int i=0; i < quatity; i++){
+    public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quantity){
+        Collection<Task> tasks = new HashSet<>(quantity);
+        for(int i=0; i < quantity; i++){
             HttpGet get = new HttpGet(PropertiesReader.getHostName());
-            tasks.add(new Task(get,client, i));
+            tasks.add(new Task(get, client, i));
         }
         return tasks;
 

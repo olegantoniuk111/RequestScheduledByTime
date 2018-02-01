@@ -40,6 +40,7 @@ public class TaskExecutor {
 
         }
         stopTasksExecution(scheduledExecutorService);
+
     }
 
     private void stopTasksExecution(ScheduledThreadPoolExecutor scheduledExecutorService) {
@@ -47,7 +48,7 @@ public class TaskExecutor {
         try {
             boolean tasksDone;
             do{
-                tasksDone = scheduledExecutorService.awaitTermination(1, TimeUnit.NANOSECONDS);
+                tasksDone = scheduledExecutorService.awaitTermination(500, TimeUnit.MILLISECONDS);
             }while (!tasksDone);
         }catch (InterruptedException e){
             System.out.println("Tasks execution was interrupted");
@@ -55,9 +56,10 @@ public class TaskExecutor {
             HttpClientUtils.closeQuietly(client);
             manager.shutdown();
         }finally {
+            scheduledExecutorService.shutdownNow();
             HttpClientUtils.closeQuietly(client);
             manager.shutdown();
-            scheduledExecutorService.shutdownNow();
+
         }
     }
 
