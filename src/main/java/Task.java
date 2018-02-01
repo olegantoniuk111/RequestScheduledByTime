@@ -5,6 +5,7 @@ import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Task implements Runnable {
@@ -52,7 +53,7 @@ public class Task implements Runnable {
     }
 
     public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quatity){
-        Collection<Task> tasks = new LinkedList <Task>();
+        Collection<Task> tasks = new HashSet<Task>();
         for(int i=0; i < quatity; i++){
             HttpGet get = new HttpGet(PropertiesReader.getHostName());
             tasks.add(new Task(get,client, i));
