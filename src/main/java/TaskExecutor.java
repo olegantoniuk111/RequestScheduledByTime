@@ -13,16 +13,16 @@ public class TaskExecutor {
     private ScheduledThreadPoolExecutor scheduledExecutorService ;
     private PoolingHttpClientConnectionManager manager;
     private CloseableHttpClient client;
-    private int taskQuantity;
     private Duration duration;
+    private Collection<Task> tasks;
 
 
-    public TaskExecutor(int taskQuantity, int timeForExecution) {
-        this.taskQuantity = taskQuantity;
+    public TaskExecutor(int taskQuantity, int timeForExecution, String host) {
         this.duration = calculateDuration(taskQuantity, timeForExecution);
         manager = new PoolingHttpClientConnectionManager();
         client = HttpClients
                 .custom().setConnectionManager(manager).build();
+        this.tasks = Task.createRequestTasks(client, taskQuantity, host);
         scheduledExecutorService = new ScheduledThreadPoolExecutor(taskQuantity);
 
     }
@@ -32,7 +32,6 @@ public class TaskExecutor {
 
 
     public void executeTasks( )  {
-        Collection <Task> tasks = Task.createRequestTasks(client, taskQuantity);
         long time = 0;
         for(Task task : tasks){
             scheduledExecutorService.schedule(task, time, TimeUnit.NANOSECONDS);

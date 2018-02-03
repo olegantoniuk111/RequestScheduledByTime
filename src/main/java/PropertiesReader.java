@@ -14,8 +14,6 @@ public class PropertiesReader {
         return Integer.valueOf(getPropertiesByKey("requestQuantity"));
     }
 
-
-
     public static int getTimeForExecution(){
         return Integer.valueOf(getPropertiesByKey("timeForExecution"));
     }

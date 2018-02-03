@@ -67,10 +67,10 @@ public class Task implements Runnable {
         return LocalTime.now();
     }
 
-    public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quantity){
+    public static Collection<Task> createRequestTasks(CloseableHttpClient client, int quantity, String host){
         Collection<Task> tasks = new LinkedHashSet<>();
         for(int i=0; i < quantity; i++){
-            HttpGet get = new HttpGet(PropertiesReader.getHostName());
+            HttpGet get = new HttpGet(host);
             tasks.add(new Task(get, client, i));
         }
         return tasks;
